@@ -4,25 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InterviewIQ</title>
-    <!-- Google Fonts for modern typography -->
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         :root {
             --primary: #4f46e5;
             --primary-hover: #4338ca;
-            --background: #f8fafc;
+            --background: linear-gradient(135deg, #eef2f6 0%, #e2e8f0 100%);
             --card-bg: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --border: #e2e8f0;
+            --border: #cbd5e1;
+            --dropzone-hover-bg: #eef2ff;
+        }
+
+        /* Automatic Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary: #6366f1;
+                --primary-hover: #4f46e5;
+                --background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+                --card-bg: #1e293b;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --border: #475569;
+                --dropzone-hover-bg: #312e81;
+            }
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #eef2f6 0%, #e2e8f0 100%);
+            background: var(--background);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -30,26 +49,33 @@
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
+            transition: background 0.3s ease;
         }
 
         .upload-container {
             background-color: var(--card-bg);
             padding: 2.5rem;
             border-radius: 24px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
             width: 100%;
             max-width: 450px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            animation: slideUp 0.5s ease-out;
         }
 
-        /* Logo Design */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Logo */
         .logo-wrapper {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
         }
 
         .logo-icon {
@@ -63,7 +89,7 @@
             justify-content: center;
             font-weight: 700;
             font-size: 1.25rem;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 4px 12px rgba(79,70,229,0.3);
         }
 
         .logo-text {
@@ -79,41 +105,87 @@
 
         h3 {
             color: var(--text-muted);
-            font-size: 1rem;
-            font-weight: 500;
+            font-size: 0.95rem;
+            font-weight: 400;
             margin: 0 0 2rem 0;
         }
 
-        /* Drag & Drop Zone Appearance */
+        /* Upload Box */
         .drop-zone {
-            border: 2px dashed #cbd5e1;
-            padding: 2rem 1.5rem;
+            border: 2px dashed var(--border);
+            padding: 2.5rem 1.5rem;
             border-radius: 16px;
             cursor: pointer;
             transition: all 0.2s ease;
-            background-color: #f8fafc;
-            margin-bottom: 2rem;
+            background-color: rgba(0, 0, 0, 0.02);
+            margin-bottom: 1.5rem;
             position: relative;
         }
 
-        .drop-zone:hover {
+        /* Drag over effect managed via JS */
+        .drop-zone.drag-over {
             border-color: var(--primary);
-            background-color: #f0fdf4;
+            background-color: var(--dropzone-hover-bg);
+            transform: scale(1.02);
+        }
+
+        .drop-zone:hover:not(.drag-over) {
+            border-color: var(--primary);
+            background-color: var(--dropzone-hover-bg);
         }
 
         .drop-zone-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
+            font-size: 2.5rem;
+            margin-bottom: 12px;
             display: block;
+            color: var(--primary);
+            transition: transform 0.2s ease;
+        }
+
+        .drop-zone:hover .drop-zone-icon {
+            transform: translateY(-4px);
         }
 
         .drop-zone-text {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            font-weight: 500;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
         }
 
-        /* Hidden standard file input styled via label */
+        .drop-zone-subtext {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        #file-name {
+            margin-top: 12px;
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(79, 70, 229, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #remove-file {
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        #remove-file:hover {
+            color: #ef4444;
+        }
+
         input[type="file"] {
             position: absolute;
             top: 0;
@@ -124,59 +196,149 @@
             cursor: pointer;
         }
 
+        /* Button */
         button {
             background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 14px 24px;
             font-size: 1rem;
             font-weight: 600;
             border-radius: 12px;
             width: 100%;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 4px 6px -1px rgba(79,70,229,0.2);
         }
 
         button:hover {
             transform: translateY(-1px);
-            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 10px 15px -3px rgba(79,70,229,0.3);
             background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
         }
 
-        button:active {
-            transform: translateY(1px);
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Loading Animation */
+        #loading {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            width: 36px;
+            height: 36px;
+            margin: auto;
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #loading p {
+            color: var(--text-muted);
+            margin-top: 12px;
+            font-weight: 500;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
 
-    <div class="upload-container">
-        
-        <!-- Smart Logo Layout -->
-        <div class="logo-wrapper">
-            <div class="logo-icon">iQ</div>
-            <div class="logo-text">Interview<span>IQ</span></div>
-        </div>
+<div class="upload-container">
 
-        <h3>Elevate your resume evaluation</h3>
+    <div class="logo-wrapper">
+        <div class="logo-icon">iQ</div>
+        <div class="logo-text">Interview<span>IQ</span></div>
+    </div>
 
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-            
-            <!-- Modern Upload Box -->
-            <div class="drop-zone">
-                <span class="drop-zone-icon">📁</span>
-                <span class="drop-zone-text">Click to browse or drag PDF here</span>
-                <input type="file" name="resume" accept=".pdf" required>
+    <h3>Elevate your resume evaluation</h3>
+
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+
+        <div class="drop-zone" id="drop-zone">
+            <span class="drop-zone-icon">
+                <i class="fa-solid fa-file-arrow-up"></i>
+            </span>
+            <span class="drop-zone-text">Drag & drop your resume here</span>
+            <span class="drop-zone-subtext">or click to browse local files</span>
+
+            <div id="file-name">
+                <i class="fa-solid fa-file-pdf"></i>
+                <span id="name-text"></span>
+                <i class="fa-solid fa-circle-xmark" id="remove-file" title="Remove file"></i>
             </div>
 
-            <button type="submit">
-                Upload Resume
-            </button>
+            <input type="file" id="resume" name="resume" accept=".pdf" required>
+        </div>
 
-        </form>
+        <button type="submit" id="upload-btn">
+            Upload Resume
+        </button>
 
-    </div>
+        <div id="loading">
+            <div class="spinner"></div>
+            <p>Analyzing Resume...</p>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    const fileInput = document.getElementById("resume");
+    const fileNameContainer = document.getElementById("file-name");
+    const nameText = document.getElementById("name-text");
+    const removeFileBtn = document.getElementById("remove-file");
+    const dropZone = document.getElementById("drop-zone");
+    const form = document.querySelector("form");
+
+    // Show name of file when selected
+    function handleFileChange() {
+        if (fileInput.files.length > 0) {
+            nameText.textContent = fileInput.files[0].name;
+            fileNameContainer.style.display = "inline-flex";
+        } else {
+            fileNameContainer.style.display = "none";
+        }
+    }
+
+    fileInput.addEventListener("change", handleFileChange);
+
+    // Let the user clear the selected file
+    removeFileBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        e.stopPropagation(); // Stops regular click behaviors
+        fileInput.value = ""; 
+        handleFileChange();
+    });
+
+    // Visual effect when dragging a file directly over the box
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.add('drag-over'), false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.remove('drag-over'), false);
+    });
+
+    // Form submit animations
+    form.addEventListener("submit", function() {
+        document.getElementById("loading").style.display = "block";
+        const btn = document.getElementById("upload-btn");
+        btn.innerText = "Uploading...";
+        btn.disabled = true;
+    });
+</script>
 
 </body>
 </html>
