@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request    
+from resume_parser.parser import analyze_resume
 import pdfplumber
 import os
 
@@ -48,11 +49,12 @@ def upload():
 
     extracted_text = extract_text_from_pdf(filepath)
 
-    return f"""
-    <h2>Resume Text Extracted Successfully</h2>
-    <pre>{extracted_text}</pre>
-    """
+    analysis = analyze_resume(extracted_text)
 
+    return render_template(
+        "results.html",
+        analysis=analysis
+)
 
 if __name__ == "__main__":
     app.run(debug=True)

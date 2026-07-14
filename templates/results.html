@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results | InterviewIQ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 2.5rem;
+            border-radius: 24px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 { color: var(--text-main); font-size: 1.5rem; margin-bottom: 2rem; }
+        
+        h3 { 
+            color: var(--text-muted); 
+            font-size: 0.8rem; 
+            text-transform: uppercase; 
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem; 
+        }
+
+        .email-box {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            display: inline-block;
+        }
+
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .skill {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: #eef2ff;
+            color: #4338ca;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid #e0e7ff;
+            transition: transform 0.2s;
+        }
+
+        .skill:hover {
+            transform: scale(1.05);
+            background: #e0e7ff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>✨ Analysis Complete</h1>
+
+    <h3>Extracted Email</h3>
+    <div class="email-box">
+        {{ analysis.email }}
+    </div>
+
+    <h3>Technical Skills Detected</h3>
+    <div class="skills-grid">
+        {% for skill in analysis.skills %}
+            <span class="skill">{{ skill }}</span>
+        {% endfor %}
+    </div>
+</div>
+
+</body>
+</html>
