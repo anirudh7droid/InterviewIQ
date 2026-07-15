@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analysis Results | InterviewIQ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Results | InterviewIQ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #4f46e5;
@@ -14,90 +14,69 @@
             --text-muted: #64748b;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f1f5f9;
-            margin: 0;
-            padding: 40px 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .card {
-            background: var(--card);
-            padding: 2.5rem;
-            border-radius: 24px;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h1 { color: var(--text-main); font-size: 1.5rem; margin-bottom: 2rem; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding: 40px 20px; }
         
-        h3 { 
-            color: var(--text-muted); 
-            font-size: 0.8rem; 
-            text-transform: uppercase; 
-            letter-spacing: 0.05em;
-            margin-bottom: 0.75rem; 
-        }
+        .container { max-width: 900px; margin: auto; }
 
-        .email-box {
-            background: #f8fafc;
-            padding: 1rem;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            color: var(--primary);
-            font-weight: 600;
-            margin-bottom: 2rem;
-            display: inline-block;
-        }
+        /* Dashboard Grid */
+        .grid { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
+        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
 
-        .skills-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
+        .card { background: var(--card); padding: 24px; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 20px; }
 
-        .skill {
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: #eef2ff;
-            color: #4338ca;
-            font-size: 0.9rem;
-            font-weight: 500;
-            border: 1px solid #e0e7ff;
-            transition: transform 0.2s;
-        }
+        h1 { margin: 0 0 10px 0; font-size: 2rem; }
+        h2 { font-size: 1.1rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.5rem; }
 
-        .skill:hover {
-            transform: scale(1.05);
-            background: #e0e7ff;
-        }
+        /* Profile & Score Styling */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .score-card { text-align: center; display: flex; flex-direction: column; justify-content: center; }
+        .score { font-size: 3.5rem; font-weight: 800; color: var(--primary); line-height: 1; }
+        
+        /* Skills & Lists */
+        .skill { display: inline-block; padding: 6px 14px; margin: 4px; border-radius: 8px; background: #eef2ff; color: var(--primary); font-weight: 600; font-size: 0.85rem; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 10px; color: var(--text-main); line-height: 1.6; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h1>✨ Analysis Complete</h1>
+<div class="container">
+    <div class="grid">
+        <!-- Main Info -->
+        <div>
+            <div class="card">
+                <h1>{{ analysis.name }}</h1>
+                <div class="info-grid">
+                    <p>📧 {{ analysis.email }}</p>
+                    <p>📱 {{ analysis.phone }}</p>
+                    <p>🔗 {{ analysis.github }}</p>
+                    <p>💼 {{ analysis.linkedin }}</p>
+                </div>
+            </div>
 
-    <h3>Extracted Email</h3>
-    <div class="email-box">
-        {{ analysis.email }}
+            <div class="card">
+                <h2>Technical Skills</h2>
+                {% for skill in analysis.skills %}
+                    <span class="skill">{{ skill }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Score Sidebar -->
+        <div class="score-card card">
+            <h2>Resume Score</h2>
+            <div class="score">{{ analysis.score }}</div>
+            <p style="color: var(--text-muted);">out of 100</p>
+        </div>
     </div>
 
-    <h3>Technical Skills Detected</h3>
-    <div class="skills-grid">
-        {% for skill in analysis.skills %}
-            <span class="skill">{{ skill }}</span>
-        {% endfor %}
+    <div class="card">
+        <h2>Projects & Experience</h2>
+        <ul>
+            {% for project in analysis.projects %}
+                <li>{{ project }}</li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
 
