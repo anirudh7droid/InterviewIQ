@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Results | InterviewIQ</title>
+    <title>Dashboard | InterviewIQ</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,27 +15,32 @@
         }
 
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding: 40px 20px; }
-        
         .container { max-width: 900px; margin: auto; }
-
-        /* Dashboard Grid */
+        
+        /* Grid Layout */
         .grid { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
 
         .card { background: var(--card); padding: 24px; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        h1 { margin: 0 0 10px 0; font-size: 1.8rem; }
+        h2 { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1.2rem; }
 
-        h1 { margin: 0 0 10px 0; font-size: 2rem; }
-        h2 { font-size: 1.1rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.5rem; }
-
-        /* Profile & Score Styling */
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .score-card { text-align: center; display: flex; flex-direction: column; justify-content: center; }
-        .score { font-size: 3.5rem; font-weight: 800; color: var(--primary); line-height: 1; }
+        /* Profile & Score */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.95rem; }
+        .score { font-size: 3.5rem; font-weight: 800; color: var(--primary); line-height: 1; text-align: center; }
         
-        /* Skills & Lists */
+        /* Skills */
         .skill { display: inline-block; padding: 6px 14px; margin: 4px; border-radius: 8px; background: #eef2ff; color: var(--primary); font-weight: 600; font-size: 0.85rem; }
-        ul { padding-left: 20px; }
-        li { margin-bottom: 10px; color: var(--text-main); line-height: 1.6; }
+        
+        /* Question Cards */
+        .question-card { background: #f8fafc; border-left: 5px solid var(--primary); padding: 16px; margin-top: 12px; border-radius: 0 10px 10px 0; transition: transform 0.2s; }
+        .question-card:hover { transform: translateX(5px); background: #f1f5f9; }
+        .question-card strong { color: var(--primary); font-size: 0.75rem; text-transform: uppercase; }
+        .question-card p { margin: 5px 0 0 0; font-weight: 500; }
+        
+        /* Projects List */
+        ul { padding-left: 20px; margin: 0; }
+        li { margin-bottom: 8px; color: var(--text-main); }
     </style>
 </head>
 <body>
@@ -63,15 +68,25 @@
         </div>
 
         <!-- Score Sidebar -->
-        <div class="score-card card">
+        <div class="card">
             <h2>Resume Score</h2>
             <div class="score">{{ analysis.score }}</div>
-            <p style="color: var(--text-muted);">out of 100</p>
+            <p style="text-align: center; color: var(--text-muted); margin-top: 10px;">out of 100</p>
         </div>
     </div>
 
     <div class="card">
-        <h2>Projects & Experience</h2>
+        <h2>🎤 Interview Questions</h2>
+        {% for question in questions %}
+            <div class="question-card">
+                <strong>Q{{ loop.index }}</strong>
+                <p>{{ question }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <h2>Projects</h2>
         <ul>
             {% for project in analysis.projects %}
                 <li>{{ project }}</li>

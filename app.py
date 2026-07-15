@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request    
 from resume_parser.parser import analyze_resume
+from question_generator.generator import generate_ai_questions
 import pdfplumber
 import os
 
@@ -50,11 +51,17 @@ def upload():
     extracted_text = extract_text_from_pdf(filepath)
 
     analysis = analyze_resume(extracted_text)
+    questions = generate_ai_questions(
+    extracted_text,
+    analysis["skills"],
+    analysis["projects"]
+)
 
     return render_template(
         "results.html",
-        analysis=analysis
-)
+        analysis=analysis,
+        questions=questions
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
